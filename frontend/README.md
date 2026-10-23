@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VendorVerse — Customer Website (frontend)
 
-## Getting Started
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Lucide icons
 
-First, run the development server:
+## Run
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install      # first time only
+npm run dev      # http://localhost:3000 (auto-reloads on save)
+npm run lint     # ESLint
+npm run build    # production build — CI runs this on every PR
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Folder map
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+src/
+├── app/
+│   ├── layout.tsx        # frame of every page: top bar, header, category bar, footer
+│   ├── page.tsx          # homepage — loads data, places the sections in order
+│   ├── not-found.tsx     # "coming soon" page for routes not built yet
+│   ├── globals.css       # Tailwind + brand colours (@theme)
+│   └── icon.svg          # browser tab icon
+├── components/
+│   ├── layout/           # TopBar, Header, SearchBar, CategoryNav, Footer, Logo, SupportButton
+│   ├── home/             # HeroSection (CategorySidebar + HeroCarousel + SidePanel),
+│   │                     # ServiceBar, FlashSale + CountdownTimer, CategoryGrid, JustForYou
+│   └── product/          # ProductCard, FlashSaleCard, RatingStars
+├── data/                 # mock products, categories, banners (until the backend API is ready)
+├── lib/
+│   ├── api.ts            # data layer — the only place to change when the real API arrives
+│   └── format.ts         # ৳ price, discount %, "8.2K" count helpers
+└── types/index.ts        # shared TypeScript types (Product, Category, Banner …)
+public/images/mock/       # placeholder product images (SVG)
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Homepage sections (Daraz layout)
 
-## Learn More
+1. Top bar, sticky header with search and cart, category/campaign bar
+2. Hero: category menu · auto-sliding banner carousel · VV Coins check-in and vouchers
+3. Service bar (authentic, returns, COD, delivery, secure payment)
+4. Flash Sale with live countdown and sold-progress bars
+5. Category tiles
+6. Just For You product grid with **LOAD MORE**
+7. Footer and the floating "Ask Vira" AI support button
 
-To learn more about Next.js, take a look at the following resources:
+## Connecting the backend later
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Components never import from `src/data/` directly — they get data from `src/lib/api.ts`.
+When the NestJS API is ready, replace the inside of those functions with `fetch` calls
+(see the comment at the top of `api.ts`); the UI does not change.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Credits
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Placeholder product images: [Microsoft Fluent Emoji](https://github.com/microsoft/fluentui-emoji) (MIT licence),
+see `public/images/mock/LICENSE.txt`.
