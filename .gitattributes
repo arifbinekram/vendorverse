@@ -1,0 +1,11 @@
+# সব text file-এ LF line ending — Windows, Linux, macOS সবার PC-তে একই রকম থাকবে
+# (Windows-এ "LF will be replaced by CRLF" warning-ও আর আসবে না)
+* text=auto eol=lf
+
+# এগুলো binary — Git এদের ভেতরে কোনো পরিবর্তন করবে না
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.woff2 binary

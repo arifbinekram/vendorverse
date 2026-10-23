@@ -1,0 +1,30 @@
+# VendorVerse — whole-repo ignore rules
+# (each app, like frontend/, also has its own .gitignore)
+
+# dependencies — npm install দিয়ে আবার বানানো যায়, তাই GitHub-এ যায় না
+node_modules/
+
+# build output
+.next/
+out/
+dist/
+build/
+coverage/
+
+# env files — password, API key, token থাকে; কখনো commit হবে না
+.env
+.env.*
+!.env.example
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json

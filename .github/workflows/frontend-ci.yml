@@ -1,0 +1,45 @@
+# Frontend CI — প্রতিটা pull request-এ আর main-এ push হলে GitHub নিজে থেকেই
+# frontend-কে install → lint → build করে দেখে। কিছু ভাঙলে PR-এ লাল ✗ দেখায়।
+name: Frontend CI
+
+on:
+  pull_request: # যেকোনো PR খুললে বা PR-এর branch-এ নতুন commit push করলে
+  push:
+    branches: [main] # main-এ merge হওয়ার পরেও একবার চলে
+
+permissions:
+  contents: read # শুধু code পড়ার অনুমতি — নিরাপদ default
+
+concurrency: # একই branch-এ নতুন push এলে আগের চলমান run বাতিল (free minutes বাঁচে)
+  group: frontend-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-build:
+    name: Lint & Build
+    runs-on: ubuntu-latest # GitHub-এর free Linux machine
+    timeout-minutes: 15 # কোনো কারণে আটকে গেলে ১৫ মিনিটে নিজে থেকে বন্ধ
+    defaults:
+      run:
+        working-directory: frontend # সব command frontend/ folder-এর ভেতরে চলবে
+    env:
+      NEXT_TELEMETRY_DISABLED: 1 # Next.js-এর anonymous usage data পাঠানো বন্ধ
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7 # repo-র code GitHub-এর machine-এ নামানো
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24 # local machine-এও Node 24 LTS ব্যবহার করুন
+          cache: npm # npm download cache — পরের run দ্রুত হয়
+          cache-dependency-path: frontend/package-lock.json # cache কোন lock file দেখে বানাবে
+
+      - name: Install dependencies
+        run: npm ci # package-lock.json অনুযায়ী হুবহু একই version install
+
+      - name: Lint
+        run: npm run lint # ESLint দিয়ে code-এর ভুল আর খারাপ অভ্যাস ধরা
+
+      - name: Build
+        run: npm run build # production build — TypeScript error থাকলেও এখানে ধরা পড়ে
