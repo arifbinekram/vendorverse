@@ -19,6 +19,7 @@ export default function FlashSaleCard({ product }: { product: FlashSaleProduct }
           src={product.image}
           alt={product.title}
           fill
+          unoptimized
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 200px"
           className="object-contain p-6 transition-transform duration-300 group-hover:scale-105"
         />

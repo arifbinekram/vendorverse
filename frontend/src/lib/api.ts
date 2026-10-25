@@ -14,8 +14,20 @@ import { categoryTiles, sidebarCategories } from "@/data/categories";
 import { flashSaleItems, justForYouOrder, products } from "@/data/products";
 import type { Banner, Category, FlashSaleProduct, Product } from "@/types";
 
+const API_URL = process.env.API_URL?.replace(/\/$/, "");
+
 // id দিয়ে দ্রুত product খোঁজার জন্য একটা Map বানিয়ে রাখি
 const productById = new Map(products.map((p) => [p.id, p]));
+
+async function fetchProducts<T>(path: string): Promise<T> {
+  if (!API_URL) throw new Error("API_URL is not configured.");
+
+  const response = await fetch(`${API_URL}/api/products${path}`, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`Product API request failed (${response.status} ${response.statusText}).`);
+  }
+  return (await response.json()) as T;
+}
 
 // id থেকে product আনে; না পেলে error দেয় (ভুল id ধরতে সুবিধা)
 function findProduct(id: string): Product {
@@ -41,6 +53,8 @@ export async function getCategoryTiles(): Promise<Category[]> {
 
 // Flash Sale-এর product-গুলো, সাথে কত % বিক্রি হয়েছে
 export async function getFlashSaleProducts(): Promise<FlashSaleProduct[]> {
+  if (API_URL) return fetchProducts<FlashSaleProduct[]>("/flash-sale");
+
   return flashSaleItems.map((item) => ({
     ...findProduct(item.productId), // পুরো product-এর তথ্য
     soldPercent: item.soldPercent, // progress bar-এর %
@@ -49,5 +63,7 @@ export async function getFlashSaleProducts(): Promise<FlashSaleProduct[]> {
 
 // "Just For You" অংশের সব product, নির্দিষ্ট ক্রমে
 export async function getJustForYouProducts(): Promise<Product[]> {
+  if (API_URL) return fetchProducts<Product[]>("");
+
   return justForYouOrder.map(findProduct); // id-র list → product-এর list
 }

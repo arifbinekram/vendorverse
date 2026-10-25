@@ -9,6 +9,7 @@ const navLinks = [
   { label: "New Arrivals", href: "/new-arrivals" },
   { label: "Global Collection", href: "/global" },
   { label: "Groceries", href: "/category/groceries" },
+  { label: "Add Product", href: "/admin/products" },
 ];
 
 // Categories + campaign link-এর bar — mobile-এ পাশাপাশি scroll হয়

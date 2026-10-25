@@ -14,7 +14,9 @@ export type Product = {
   sold: number; // মোট কতগুলো বিক্রি হয়েছে
   category: string; // কোন category-র (slug)
   store: string; // কোন seller-এর দোকান
+  vendor?: string; // দোকানটির মালিক vendor
   location: string; // seller কোন শহর থেকে পাঠায়
+  stockQuantity?: number; // available catalog stock
   isMall?: boolean; // VV Mall (official brand) হলে true
   freeDelivery?: boolean; // free delivery থাকলে true
 };
