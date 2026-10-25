@@ -13,8 +13,8 @@ This is a monorepo — every part of the project lives in one GitHub repository.
 
 | Folder | What lives here | Status |
 | --- | --- | --- |
-| [`frontend/`](frontend) | Customer website — Next.js 16, React 19, TypeScript, Tailwind CSS v4 | Homepage in progress |
-| `backend/` | REST API — NestJS, Prisma, PostgreSQL (added by the backend developer) | Planned |
+| [`frontend/`](frontend) | Customer website — Next.js 16, React 19, TypeScript, Tailwind CSS v4 | Homepage and product entry demo |
+| [`backend/`](backend) | REST API — NestJS, Prisma, PostgreSQL | Product API |
 | [`docs/`](docs) | Team documents — [Git workflow](docs/GIT_WORKFLOW.md) | Active |
 | [`.github/`](.github) | GitHub Actions CI and the pull request template | Active |
 
@@ -31,13 +31,19 @@ npm run dev
 
 Then open http://localhost:3000.
 
+## Product database demo
+
+The product entry flow and deployment steps are documented in
+[`docs/PRODUCT_DEMO.md`](docs/PRODUCT_DEMO.md). The frontend uses local mock data when
+`API_URL` is unset; set it to the backend URL to read live PostgreSQL products.
+
 ## Tech stack
 
 | Layer | Technology |
 | --- | --- |
 | Frontend | Next.js (App Router), React, TypeScript, Tailwind CSS, Lucide icons |
-| Backend (planned) | NestJS, Prisma ORM, Socket.IO, BullMQ |
-| Databases (planned) | PostgreSQL + pgvector, Redis, Meilisearch |
+| Backend | NestJS, Prisma ORM |
+| Database | PostgreSQL |
 | Agentic AI (planned) | Google Gemini API (free tier) + Google Agent Development Kit |
 | DevOps | Git + GitHub, GitHub Actions CI, Docker Compose (planned) |
 

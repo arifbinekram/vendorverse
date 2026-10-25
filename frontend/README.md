@@ -11,6 +11,11 @@ npm run lint     # ESLint
 npm run build    # production build — CI runs this on every PR
 ```
 
+To display products from PostgreSQL, copy `.env.example` to `.env.local` and set
+`API_URL` to the NestJS API base URL. Without it, the homepage uses the bundled mock
+catalog. The admin product form is at `/admin/products`; product creation requires
+the backend's `ADMIN_API_TOKEN`.
+
 ## Folder map
 
 ```
@@ -26,7 +31,7 @@ src/
 │   ├── home/             # HeroSection (CategorySidebar + HeroCarousel + SidePanel),
 │   │                     # ServiceBar, FlashSale + CountdownTimer, CategoryGrid, JustForYou
 │   └── product/          # ProductCard, FlashSaleCard, RatingStars
-├── data/                 # mock products, categories, banners (until the backend API is ready)
+├── data/                 # fallback mock products, categories and banners
 ├── lib/
 │   ├── api.ts            # data layer — the only place to change when the real API arrives
 │   └── format.ts         # ৳ price, discount %, "8.2K" count helpers
@@ -44,11 +49,15 @@ public/images/mock/       # placeholder product images (SVG)
 6. Just For You product grid with **LOAD MORE**
 7. Footer and the floating "Ask Vira" AI support button
 
-## Connecting the backend later
+## Product API
 
-Components never import from `src/data/` directly — they get data from `src/lib/api.ts`.
-When the NestJS API is ready, replace the inside of those functions with `fetch` calls
-(see the comment at the top of `api.ts`); the UI does not change.
+Components never import from `src/data/` directly — they get product data from
+`src/lib/api.ts`. When `API_URL` is set, that data layer fetches the NestJS API with
+cache disabled so new products show up on the next page request. The admin form
+submits through a same-origin Next.js route and does not store the admin token.
+
+See [`../docs/PRODUCT_DEMO.md`](../docs/PRODUCT_DEMO.md) for database setup and the
+Vercel demo deployment steps.
 
 ## Credits
 

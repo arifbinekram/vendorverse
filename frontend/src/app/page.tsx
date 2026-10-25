@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import CategoryGrid from "@/components/home/CategoryGrid";
 import FlashSale from "@/components/home/FlashSale";
 import HeroSection from "@/components/home/HeroSection";
@@ -13,7 +15,15 @@ import {
 
 // Homepage (http://localhost:3000/) — Daraz-এর মতো ক্রমে সাজানো:
 // Hero (category + banner + coins) → service bar → Flash Sale → Categories → Just For You
-export default async function HomePage() {
+export default function HomePage() {
+  return (
+    <Suspense fallback={<div className="page-container py-8 text-sm text-muted">Loading VendorVerse...</div>}>
+      <HomeContent />
+    </Suspense>
+  );
+}
+
+async function HomeContent() {
   // সব data একসাথে আনা — একটার জন্য আরেকটা অপেক্ষা করে না (Promise.all)
   const [banners, sidebarCategories, flashSaleProducts, categoryTiles, justForYouProducts] = await Promise.all([
     getBanners(),
