@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SupportConversation {
+  id        String           @id @default(cuid())
+  visitorId String?
+  subject   String           @default("Help Center conversation")
+  language  String           @default("en")
+  status    String           @default("open")
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  messages  SupportMessage[]
+
+  @@index([visitorId, updatedAt])
+}
+
+model SupportMessage {
+  id             String             @id @default(cuid())
+  conversationId String
+  conversation SupportConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           String
+  content        String             @db.Text
+  createdAt      DateTime           @default(now())
+
+  @@index([conversationId, createdAt])
+}
